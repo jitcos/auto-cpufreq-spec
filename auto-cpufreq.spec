@@ -1,21 +1,25 @@
 Name:           auto-cpufreq
-Version:        1.9.3
+Version:        2.2.0
 Release:        1%{?dist}
 Summary:        Automatic CPU speed & power optimizer for Linux
 
 License:        MIT
 URL:            https://github.com/AdnanHodzic/%{name}
 Source0:        %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
-# Source0:        %%{pypi_source}
 # This is a downstream only patch. Upstream's build scripts expect the script
 # to be installed in a venv located at a specific path.
 Patch0:         fix-systemd-unit-file-paths.patch
 
 BuildArch:      noarch
 
-BuildRequires:  python3-devel
-BuildRequires:  systemd-rpm-macros
+BuildRequires:  python-devel
 BuildRequires:  dmidecode
+BuildRequires:  gcc
+BuildRequires:  cairo-devel
+BuildRequires:  gobject-introspection-devel
+BuildRequires:  cairo-gobject-devel
+BuildRequires:  gtk3-devel
+BuildRequires:  binutils
 
 Requires:       dmidecode
 
@@ -40,7 +44,6 @@ Requires:       dmidecode
 install -Dpm 0644 scripts/%{name}.service -t %{buildroot}%{_unitdir}
 install -d %{buildroot}%{_datadir}/%{name}
 cp -pr scripts %{buildroot}%{_datadir}/%{name}/scripts
-# install -Dpm 755 scripts/cpufreqctl.sh -t %{buildroot}%{_datadir}/%{name}/scripts
 
 
 %check
@@ -69,5 +72,5 @@ cp -pr scripts %{buildroot}%{_datadir}/%{name}/scripts
 
 
 %changelog
-* Thu Mar 3 2022 Maxwell G <gotmax@e.email> - 1.9.3-1
+* Thu Mar 28 2024 m0ngr31 <joe@ipson.me> - 2.2.0
 - Initial Package
