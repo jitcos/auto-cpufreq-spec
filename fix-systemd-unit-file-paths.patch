@@ -4,10 +4,10 @@ diff -Naur a/auto_cpufreq/core.py b/auto_cpufreq/core.py
 @@ -27,7 +27,7 @@
  # - re-enable CPU fan speed display and make more generic and not only for thinkpad
  # - replace get system/CPU load from: psutil.getloadavg() | available in 5.6.2)
- 
+
 -SCRIPTS_DIR = Path("/usr/local/share/auto-cpufreq/scripts/")
 +SCRIPTS_DIR = Path("/usr/share/auto-cpufreq/scripts/")
- 
+
  # from the highest performance to the lowest
  ALL_GOVERNORS = (
 diff -Naur a/scripts/auto-cpufreq.service b/scripts/auto-cpufreq.service
@@ -22,22 +22,5 @@ diff -Naur a/scripts/auto-cpufreq.service b/scripts/auto-cpufreq.service
 -ExecStart=/opt/auto-cpufreq/venv/bin/python /opt/auto-cpufreq/venv/bin/auto-cpufreq --daemon
 +ExecStart=/usr/bin/auto-cpufreq --daemon
  Restart=on-failure
- 
+
  [Install]
-diff -Naur a/setup.py b/setup.py
---- a/setup.py	2022-03-10 00:04:42.000000000 -0600
-+++ b/setup.py	2022-04-04 17:15:42.364032007 -0500
-@@ -17,13 +17,6 @@
- 
- setup(
-     name="auto-cpufreq",
--    setuptools_git_versioning={
--        "starting_version": VERSION,
--        "template": "{tag}+{sha}",
--        "dev_template": "{tag}+{sha}",
--        "dirty_template": "{tag}+{sha}.post{ccount}.dirty"
--    },
--    setup_requires=["setuptools-git-versioning"],
-     description="Automatic CPU speed & power optimizer for Linux",
-     long_description=readme,
-     author="Adnan Hodzic",
