@@ -71,7 +71,7 @@ install -Dm644 scripts/auto-cpufreq-gtk.desktop -t "$RPM_BUILD_ROOT/usr/share/ap
 %{_datadir}/pixmaps/%{name}.png
 %{_datadir}/applications/auto-cpufreq-gtk.desktop
 %{_datadir}/polkit-1/actions/org.auto-cpufreq.pkexec.policy
-/%{_unitdir}/%{name}.service
+/usr/lib/systemd/system/%{name}.service
 %{python3_sitelib}/auto_cpufreq
 %{python3_sitelib}/auto_cpufreq-1.dist-info
 
