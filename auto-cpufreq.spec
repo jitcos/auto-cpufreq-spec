@@ -55,7 +55,7 @@ mkdir -p $RPM_BUILD_ROOT/usr/share/%{name}/scripts/
 
 install -Dm755 scripts/auto-cpufreq-install.sh "$RPM_BUILD_ROOT/usr/share/%{name}/scripts/"
 install -Dm755 scripts/auto-cpufreq-remove.sh "$RPM_BUILD_ROOT/usr/share/%{name}/scripts/"
-install -Dm644 %{SOURCE1} %{buildroot}/usr/lib/systemd/system/%{name}.service
+install -Dm644 %{SOURCE1} "$RPM_BUILD_ROOT/usr/lib/systemd/system/%{name}.service"
 install -Dm755 scripts/cpufreqctl.sh "$RPM_BUILD_ROOT/usr/share/%{name}/scripts/"
 install -Dm644 scripts/style.css "$RPM_BUILD_ROOT/usr/share/%{name}/scripts/"
 install -Dm644 images/icon.png "$RPM_BUILD_ROOT/usr/share/pixmaps/%{name}.png"
@@ -71,7 +71,7 @@ install -Dm644 scripts/auto-cpufreq-gtk.desktop -t "$RPM_BUILD_ROOT/usr/share/ap
 %{_datadir}/pixmaps/%{name}.png
 %{_datadir}/applications/auto-cpufreq-gtk.desktop
 %{_datadir}/polkit-1/actions/org.auto-cpufreq.pkexec.policy
-%{_unitdir}/%{name}.service
+/%{_unitdir}/%{name}.service
 %{python3_sitelib}/auto_cpufreq
 %{python3_sitelib}/auto_cpufreq-1.dist-info
 
