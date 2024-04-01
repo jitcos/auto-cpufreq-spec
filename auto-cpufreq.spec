@@ -14,6 +14,7 @@ BuildArch:      noarch
 
 BuildRequires:  python3-devel
 BuildRequires:  python3-build
+BuildRequires:  python3-installer
 BuildRequires:  python3-poetry-core
 BuildRequires:  python3-poetry-dynamic-versioning
 BuildRequires:  dmidecode
