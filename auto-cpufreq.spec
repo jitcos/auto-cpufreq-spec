@@ -6,13 +6,16 @@ Summary:        Automatic CPU speed & power optimizer for Linux
 License:        MIT
 URL:            https://github.com/AdnanHodzic/%{name}
 Source0:        %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
-# This is a downstream only patch. Upstream's build scripts expect the script
-# to be installed in a venv located at a specific path.
-Patch0:         fix-systemd-unit-file-paths.patch
+Source1:        auto-cpufreq.service
+Patch0:        001-fix-icon-n-style-locations.patch
+Patch1:        002-fix-other-icon-path.patch
 
 BuildArch:      noarch
 
-BuildRequires:  python-devel
+BuildRequires:  python3-devel
+BuildRequires:  python3-build
+BuildRequires:  python3-poetry-core
+BuildRequires:  python3-poetry-dynamic-versioning
 BuildRequires:  dmidecode
 BuildRequires:  gcc
 BuildRequires:  cairo-devel
@@ -21,54 +24,55 @@ BuildRequires:  cairo-gobject-devel
 BuildRequires:  gtk3-devel
 BuildRequires:  binutils
 
+AutoReq:        0:python3dist(requests)
+
 Requires:       dmidecode
+Requires:       python3
+Requires:       python3-setuptools
+Requires:       python3-psutil
+Requires:       python3-click
+Requires:       python3-distro
+Requires:       python3-requests
+Requires:       python3-gobject
+Requires:       gobject-introspection
 
 %description
 %{name} is an automatic CPU speed & power optimizer for Linux.
 
 
 %prep
-%autosetup -p1
-
-%generate_buildrequires
-%pyproject_buildrequires -r
-
+%setup -q
+sed -i 's|usr/local|usr|g' "scripts/%{name}.service" auto_cpufreq/core.py
 
 %build
-%pyproject_wheel
-
 
 %install
-%pyproject_install
-%pyproject_save_files auto_cpufreq
-install -Dpm 0644 scripts/%{name}.service -t %{buildroot}%{_unitdir}
-install -d %{buildroot}%{_datadir}/%{name}
-cp -pr scripts %{buildroot}%{_datadir}/%{name}/scripts
+POETRY_DYNAMIC_VERSIONING_BYPASS=1 python3 -m build --wheel --no-isolation
+python3 -m installer --destdir="$RPM_BUILD_ROOT" dist/*.whl
 
+mkdir -p $RPM_BUILD_ROOT/usr/share/%{name}/scripts/
 
-%check
-%pyproject_check_import
+install -Dm755 scripts/auto-cpufreq-install.sh "$RPM_BUILD_ROOT/usr/share/%{name}/scripts/"
+install -Dm755 scripts/auto-cpufreq-remove.sh "$RPM_BUILD_ROOT/usr/share/%{name}/scripts/"
+install -Dm644 %{SOURCE1} "$RPM_BUILD_ROOT/usr/lib/systemd/system/%{name}.service"
+install -Dm755 scripts/cpufreqctl.sh "$RPM_BUILD_ROOT/usr/share/%{name}/scripts/"
+install -Dm644 scripts/style.css "$RPM_BUILD_ROOT/usr/share/%{name}/scripts/"
+install -Dm644 images/icon.png "$RPM_BUILD_ROOT/usr/share/pixmaps/%{name}.png"
+install -Dm644 scripts/org.auto-cpufreq.pkexec.policy -t "$RPM_BUILD_ROOT/usr/share/polkit-1/actions/"
+install -Dm644 scripts/auto-cpufreq-gtk.desktop -t "$RPM_BUILD_ROOT/usr/share/applications/"
 
-
-%post
-%systemd_post %{name}.service
-
-
-%preun
-%systemd_preun %{name}.service
-
-
-%postun
-%systemd_postun_with_restart %{name}.service
-
-
-%files -f %{pyproject_files}
+%files
 %license LICENSE
 %doc README.md
-
 %{_bindir}/%{name}
+%{_bindir}/%{name}-gtk
 %{_datadir}/%{name}
+%{_datadir}/pixmaps/%{name}.png
+%{_datadir}/applications/auto-cpufreq-gtk.desktop
+%{_datadir}/polkit-1/actions/org.auto-cpufreq.pkexec.policy
 %{_unitdir}/%{name}.service
+%{python3_sitelib}/auto_cpufreq
+%{python3_sitelib}/auto_cpufreq-1.dist-info
 
 
 %changelog
