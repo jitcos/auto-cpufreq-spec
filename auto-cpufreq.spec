@@ -7,8 +7,8 @@ License:        MIT
 URL:            https://github.com/AdnanHodzic/%{name}
 Source0:        %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
 Source1:        auto-cpufreq.service
-Patch0:        001-fix-icon-n-style-locations.patch
-Patch1:        002-fix-other-icon-path.patch
+Patch0:         001-fix-icon-n-style-locations.patch
+Patch1:         002-fix-other-icon-path.patch
 
 BuildArch:      noarch
 
@@ -55,7 +55,7 @@ mkdir -p $RPM_BUILD_ROOT/usr/share/%{name}/scripts/
 
 install -Dm755 scripts/auto-cpufreq-install.sh "$RPM_BUILD_ROOT/usr/share/%{name}/scripts/"
 install -Dm755 scripts/auto-cpufreq-remove.sh "$RPM_BUILD_ROOT/usr/share/%{name}/scripts/"
-install -Dm644 %{SOURCE1} %{buildroot}/%{_unitdir}/%{name}.service
+install -Dm644 %{SOURCE1} %{buildroot}/usr/lib/systemd/system/%{name}.service
 install -Dm755 scripts/cpufreqctl.sh "$RPM_BUILD_ROOT/usr/share/%{name}/scripts/"
 install -Dm644 scripts/style.css "$RPM_BUILD_ROOT/usr/share/%{name}/scripts/"
 install -Dm644 images/icon.png "$RPM_BUILD_ROOT/usr/share/pixmaps/%{name}.png"
