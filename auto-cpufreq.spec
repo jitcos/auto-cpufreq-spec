@@ -1,6 +1,6 @@
 Name:           auto-cpufreq
 Version:        2.2.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Automatic CPU speed & power optimizer for Linux
 
 License:        MIT
@@ -53,8 +53,11 @@ mkdir -p $RPM_BUILD_ROOT/usr/share/%{name}/scripts/
 mkdir -p $RPM_BUILD_ROOT/usr/share/%{name}/images/
 
 install -Dm755 scripts/auto-cpufreq-install.sh "$RPM_BUILD_ROOT/usr/share/%{name}/scripts/"
+install -Dm755 scripts/auto-cpufreq-install.sh "$RPM_BUILD_ROOT/usr/bin/%{name}-install"
 install -Dm755 scripts/auto-cpufreq-remove.sh "$RPM_BUILD_ROOT/usr/share/%{name}/scripts/"
+install -Dm755 scripts/auto-cpufreq-remove.sh "$RPM_BUILD_ROOT/usr/bin/%{name}-remove"
 install -Dm755 scripts/cpufreqctl.sh "$RPM_BUILD_ROOT/usr/share/%{name}/scripts/"
+install -Dm755 scripts/cpufreqctl.sh "$RPM_BUILD_ROOT/usr/bin/cpufreqctl.auto-cpufreq"
 install -Dm644 %{SOURCE1} "$RPM_BUILD_ROOT/usr/lib/systemd/system/%{name}.service"
 install -Dm644 scripts/style.css "$RPM_BUILD_ROOT/usr/share/%{name}/scripts/"
 install -Dm644 images/icon.png "$RPM_BUILD_ROOT/usr/share/pixmaps/%{name}.png"
@@ -67,6 +70,9 @@ install -Dm644 scripts/auto-cpufreq-gtk.desktop -t "$RPM_BUILD_ROOT/usr/share/ap
 %doc README.md
 %{_bindir}/%{name}
 %{_bindir}/%{name}-gtk
+%{_bindir}/%{name}-install
+%{_bindir}/%{name}-remove
+%{_bindir}/cpufreqctl.%{name}
 %{_datadir}/%{name}
 %{_datadir}/pixmaps/%{name}.png
 %{_datadir}/applications/auto-cpufreq-gtk.desktop
