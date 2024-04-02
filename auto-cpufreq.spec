@@ -1,6 +1,6 @@
 Name:           auto-cpufreq
 Version:        2.2.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Automatic CPU speed & power optimizer for Linux
 
 License:        MIT
@@ -41,6 +41,7 @@ Requires:       gobject-introspection
 
 %prep
 %setup -q
+find . -type f | xargs sed -i 's|usr/local|usr|g'
 
 %build
 
@@ -48,26 +49,28 @@ Requires:       gobject-introspection
 POETRY_DYNAMIC_VERSIONING_BYPASS=1 python3 -m build --wheel --no-isolation
 python3 -m installer --destdir="$RPM_BUILD_ROOT" dist/*.whl
 
-mkdir -p $RPM_BUILD_ROOT/usr/local/share/%{name}/scripts/
-mkdir -p $RPM_BUILD_ROOT/usr/local/share/%{name}/images/
+mkdir -p $RPM_BUILD_ROOT/usr/share/%{name}/scripts/
+mkdir -p $RPM_BUILD_ROOT/usr/share/%{name}/images/
 
-install -Dm755 scripts/auto-cpufreq-install.sh "$RPM_BUILD_ROOT/usr/local/share/%{name}/scripts/"
-install -Dm755 scripts/auto-cpufreq-remove.sh "$RPM_BUILD_ROOT/usr/local/share/%{name}/scripts/"
-install -Dm755 scripts/cpufreqctl.sh "$RPM_BUILD_ROOT/usr/local/share/%{name}/scripts/"
+install -Dm755 scripts/auto-cpufreq-install.sh "$RPM_BUILD_ROOT/usr/share/%{name}/scripts/"
+install -Dm755 scripts/auto-cpufreq-remove.sh "$RPM_BUILD_ROOT/usr/share/%{name}/scripts/"
+install -Dm755 scripts/cpufreqctl.sh "$RPM_BUILD_ROOT/usr/share/%{name}/scripts/"
 install -Dm644 %{SOURCE1} "$RPM_BUILD_ROOT/usr/lib/systemd/system/%{name}.service"
-install -Dm644 scripts/style.css "$RPM_BUILD_ROOT/usr/local/share/%{name}/scripts/"
-install -Dm644 images/icon.png "$RPM_BUILD_ROOT/usr/local/share/%{name}/images/icon.png"
-install -Dm644 scripts/org.auto-cpufreq.pkexec.policy -t "$RPM_BUILD_ROOT/usr/local/share/polkit-1/actions/"
-install -Dm644 scripts/auto-cpufreq-gtk.desktop -t "$RPM_BUILD_ROOT/usr/local/share/applications/"
+install -Dm644 scripts/style.css "$RPM_BUILD_ROOT/usr/share/%{name}/scripts/"
+install -Dm644 images/icon.png "$RPM_BUILD_ROOT/usr/share/pixmaps/%{name}.png"
+install -Dm644 images/icon.png "$RPM_BUILD_ROOT/usr/share/%{name}/images/icon.png"
+install -Dm644 scripts/org.auto-cpufreq.pkexec.policy -t "$RPM_BUILD_ROOT/usr/share/polkit-1/actions/"
+install -Dm644 scripts/auto-cpufreq-gtk.desktop -t "$RPM_BUILD_ROOT/usr/share/applications/"
 
 %files
 %license LICENSE
 %doc README.md
 %{_bindir}/%{name}
 %{_bindir}/%{name}-gtk
-/usr/local/share/%{name}
-/usr/local/share/applications/auto-cpufreq-gtk.desktop
-/usr/local/share/polkit-1/actions/org.auto-cpufreq.pkexec.policy
+%{_datadir}/%{name}
+%{_datadir}/pixmaps/%{name}.png
+%{_datadir}/applications/auto-cpufreq-gtk.desktop
+%{_datadir}/polkit-1/actions/org.auto-cpufreq.pkexec.policy
 /usr/lib/systemd/system/%{name}.service
 %{python3_sitelib}/auto_cpufreq
 %{python3_sitelib}/auto_cpufreq-1.dist-info
