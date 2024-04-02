@@ -1,6 +1,6 @@
 Name:           auto-cpufreq
 Version:        2.2.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Automatic CPU speed & power optimizer for Linux
 
 License:        MIT
